@@ -1,46 +1,30 @@
 import { useState, useEffect } from 'react'
 import { Activity, AlertTriangle, TrendingUp } from 'lucide-react'
-import { checkHealth, getSampleData, generateAttack } from './utils/api'
+import { checkHealth } from './utils/api'
+import RealtimeView from './components/realtime/RealtimeView'
+import AttacksView from './components/attacks/AttacksView'
+import AnalysisView from './components/analysis/AnalysisView'
+import useAnomalyStore from './stores/useAnomalyStore'
+import useRealtimeData from './hooks/useRealtimeData'
 
 function App() {
   const [selectedView, setSelectedView] = useState('dashboard')
   const [apiStatus, setApiStatus] = useState('checking...')
-  const [sampleData, setSampleData] = useState(null)
+  const { isStreaming } = useAnomalyStore()  // ADD THIS
 
-  // Test API connection on mount
+  // Real-time data hook at app level - keeps running across tab switches
+  useRealtimeData(isStreaming, 2000)  // ADD THIS
+
   useEffect(() => {
     checkHealth()
       .then(data => {
-        setApiStatus(data.status === 'healthy' ? '✅ Connected' : '⚠️ Unhealthy')
+        setApiStatus(data.status === 'healthy' ? 'Connected' : 'Unhealthy')
       })
       .catch(err => {
-        setApiStatus('❌ Offline')
+        setApiStatus('Offline')
         console.error('API connection failed:', err)
       })
   }, [])
-
-  const handleTestAPI = async () => {
-    try {
-      const data = await getSampleData(5)
-      setSampleData(data)
-      console.log('Sample data:', data)
-      alert('API test successful! Check console for data.')
-    } catch (err) {
-      console.error('API test failed:', err)
-      alert('API test failed. Check console.')
-    }
-  }
-
-  const handleGenerateAttack = async () => {
-    try {
-      const data = await generateAttack('fuzzy', 10)
-      console.log('Generated attack:', data)
-      alert(`Generated ${data.count} attack samples!`)
-    } catch (err) {
-      console.error('Attack generation failed:', err)
-      alert('Attack generation failed.')
-    }
-  }
 
   return (
     <div className="min-h-screen bg-background-dark text-white">
@@ -51,7 +35,7 @@ function App() {
             <Activity className="w-8 h-8 text-anomaly-critical" />
             <div>
               <h1 className="text-2xl font-bold">CAN Intrusion Detection</h1>
-              <p className="text-sm text-gray-400">HCI Research Interface</p>
+              <p className="text-sm text-gray-400">Research Interface</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -76,7 +60,7 @@ function App() {
                   : 'text-gray-400 hover:text-white'
               }`}
             >
-              {view.charAt(0).toUpperCase() + view.slice(1)}
+              {view === 'real-time' ? 'Real-Time' : view.charAt(0).toUpperCase() + view.slice(1)}
             </button>
           ))}
         </div>
@@ -86,7 +70,6 @@ function App() {
       <main className="p-6">
         {selectedView === 'dashboard' && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Stats Cards */}
             <div className="bg-background-card rounded-lg p-6 border border-gray-700">
               <div className="flex items-center justify-between">
                 <div>
@@ -117,54 +100,33 @@ function App() {
               </div>
             </div>
 
-            {/* API Test Section */}
             <div className="col-span-full bg-background-card rounded-lg p-6 border border-gray-700">
-              <h2 className="text-xl font-bold mb-4">Backend Connection Test</h2>
-              <div className="flex gap-4">
-                <button 
-                  onClick={handleTestAPI}
-                  className="px-6 py-3 bg-anomaly-normal rounded-lg hover:bg-blue-600 transition"
+              <h2 className="text-xl font-bold mb-4">Quick Start</h2>
+              <div className="grid grid-cols-2 gap-4">
+                <button
+                  onClick={() => setSelectedView('real-time')}
+                  className="p-4 bg-anomaly-normal hover:bg-blue-600 rounded-lg transition text-left"
                 >
-                  Test: Get Sample Data
+                  <p className="font-semibold mb-1">Real-Time Detection</p>
+                  <p className="text-sm text-gray-300">Monitor live sensor data</p>
                 </button>
-                <button 
-                  onClick={handleGenerateAttack}
-                  className="px-6 py-3 bg-anomaly-high rounded-lg hover:bg-orange-600 transition"
+                <button
+                  onClick={() => setSelectedView('attacks')}
+                  className="p-4 bg-anomaly-high hover:bg-orange-600 rounded-lg transition text-left"
                 >
-                  Test: Generate Attack
+                  <p className="font-semibold mb-1">Attack Simulation</p>
+                  <p className="text-sm text-gray-300">Generate and analyze attacks</p>
                 </button>
               </div>
-              {sampleData && (
-                <div className="mt-4 p-4 bg-gray-800 rounded">
-                  <p className="text-sm text-gray-300">
-                    Retrieved {sampleData.count} samples from backend
-                  </p>
-                </div>
-              )}
             </div>
           </div>
         )}
 
-        {selectedView === 'real-time' && (
-          <div className="bg-background-card rounded-lg p-6 border border-gray-700">
-            <h2 className="text-xl font-bold mb-4">Live Sensor Data Stream</h2>
-            <p className="text-gray-400">Real-time monitoring component coming soon...</p>
-          </div>
-        )}
+        {selectedView === 'real-time' && <RealtimeView />}
 
-        {selectedView === 'attacks' && (
-          <div className="bg-background-card rounded-lg p-6 border border-gray-700">
-            <h2 className="text-xl font-bold mb-4">Attack Simulation</h2>
-            <p className="text-gray-400">Attack generation interface coming soon...</p>
-          </div>
-        )}
+        {selectedView === 'attacks' && <AttacksView />}
 
-        {selectedView === 'analysis' && (
-          <div className="bg-background-card rounded-lg p-6 border border-gray-700">
-            <h2 className="text-xl font-bold mb-4">Model Analysis</h2>
-            <p className="text-gray-400">Feature importance and explanations coming soon...</p>
-          </div>
-        )}
+        {selectedView === 'analysis' && <AnalysisView />}
       </main>
     </div>
   )
