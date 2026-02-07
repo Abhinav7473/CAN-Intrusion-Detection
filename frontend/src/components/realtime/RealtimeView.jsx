@@ -1,18 +1,14 @@
-import { useState } from 'react'
-import useRealtimeData from '../../hooks/useRealtimeData'
 import AnomalyTimeline from './AnomalyTimeline'
 import SensorReadings from './SensorReadings'
 import ControlPanel from './ControlPanel'
 import FeatureImportance from './FeatureImportance'
+import useAnomalyStore from '../../stores/useAnomalyStore'
 
 const RealtimeView = () => {
-  const [isStreaming, setIsStreaming] = useState(false)
-  
-  // Hook automatically handles polling when isStreaming is true
-  useRealtimeData(isStreaming, 2000) // Poll every 2 seconds
+  const { isStreaming, setStreaming } = useAnomalyStore()
   
   const handleToggleStream = () => {
-    setIsStreaming(!isStreaming)
+    setStreaming(!isStreaming)
   }
   
   return (
@@ -33,24 +29,26 @@ const RealtimeView = () => {
           )}
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Control Panel - Left Column */}
-          <div className="lg:col-span-1">
+        {/* Top Row: Control Panel (40%) + Sensor Readings (60%) */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+          <div className="lg:col-span-2">
             <ControlPanel 
               isStreaming={isStreaming}
               onToggleStream={handleToggleStream}
             />
           </div>
           
-          {/* Main Content - Right 2 Columns */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-3">
             <SensorReadings />
-            <AnomalyTimeline />
           </div>
+        </div>
+        
+        {/* Bottom Row: Timeline (Full Width) */}
+        <div>
+          <AnomalyTimeline />
         </div>
       </div>
       
-      {/* Feature Importance Modal - renders on top when anomaly selected */}
       <FeatureImportance />
     </>
   )
