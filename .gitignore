@@ -1,0 +1,73 @@
+# ============================================
+# Python Backend
+# ============================================
+
+# Virtual Environment
+backend/venv/
+backend/env/
+backend/.venv/
+backend/.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# ============================================
+# Frontend (React + Vite)
+# ============================================
+
+# Dependencies
+frontend/node_modules/
+frontend/package-lock.json
+
+# Production build
+frontend/dist/
+frontend/dist-ssr/
+frontend/build/
+
+# Vite
+frontend/.vite/
+*.local
+
+# ============================================
+# Editor & OS
+# ============================================
+
+# VSCode
+.vscode/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# ============================================
+# Git
+# ============================================
+.git/index.lock
