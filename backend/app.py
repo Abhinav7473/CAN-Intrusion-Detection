@@ -102,9 +102,9 @@ async def generate_attack(request: AttackRequest):
 
 @app.post("/api/anomaly/detect-svm")
 async def detect_svm(reading: SensorReading):
-    """Real-time anomaly detection using One-Class SVM"""
+    """Real-time anomaly detection using One-Class SVM with feature importance"""
     try:
-        prediction, score = svm_detector.detect(reading.to_array())
+        prediction, score, importance = svm_detector.detect(reading.to_array())
         
         return {
             "success": True,
@@ -112,7 +112,8 @@ async def detect_svm(reading: SensorReading):
             "is_anomaly": prediction == 1,
             "anomaly_score": float(score),
             "confidence": abs(float(score)) / 100.0,
-            "timestamp": reading.datetime
+            "timestamp": reading.datetime,
+            "feature_importance": importance  # NEW: Feature contributions
         }
     except Exception as e:
         return JSONResponse(
