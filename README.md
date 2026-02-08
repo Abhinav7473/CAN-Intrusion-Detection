@@ -20,6 +20,15 @@ Built as a complete architectural redesign from a previous Streamlit implementat
 
 ---
 
+### Interface & Analysis Visuals
+
+**System Dashboard (Real-Time Monitoring)**  
+Live sensor readings, anomaly indicators, and system connectivity status.
+
+![Dashboard](assets/dashboard.png)
+
+---
+
 ## Core Features
 
 ### Real-Time Monitoring
@@ -31,6 +40,8 @@ Key capabilities:
 - Click-to-explain functionality revealing which sensors contributed to each detection
 - Live statistics tracking detection rates and model confidence
 
+![RTAD](assets/RTAD.png)
+
 ### Attack Simulation
 Generate synthetic attack patterns to understand how different intrusion types manifest in sensor data. Supports four attack categories:
 - Fuzzy attacks (random sensor values)
@@ -40,6 +51,8 @@ Generate synthetic attack patterns to understand how different intrusion types m
 
 Each generated attack can be compared against normal traffic patterns through side-by-side visualizations and exported as CSV for offline analysis.
 
+![Attack Visualization](assets/attack.png)
+
 ### Multi-Model Analysis
 Compare three different detection approaches on identical data:
 - SVM provides instant single-point analysis
@@ -48,8 +61,12 @@ Compare three different detection approaches on identical data:
 
 The system highlights when models disagree, creating opportunities to study how operators resolve conflicting automated advice.
 
+![Multi-Model Analysis](assets/comparison.png)
+
 ### 3D Spatial Visualization
 Explore sensor readings in three-dimensional space using WebGL rendering. Normal and anomalous data points cluster differently in this representation, with interactive camera controls allowing free exploration. New data points pulse briefly when added during live streaming.
+
+![3D Visualization](assets/analysis.png)
 
 ---
 
@@ -373,6 +390,36 @@ Focus areas for contribution:
 - Documentation improvements
 
 ---
+
+## Assets & Example Outputs
+
+This repository includes visual artifacts and sample datasets used to demonstrate system behavior, model analysis, and attack simulations.
+
+---
+
+### Data Files
+
+**Denial-of-Service Attack Dataset (CSV)**  
+Synthetic CAN traffic illustrating message flooding behavior.  
+Used for attack simulation and offline analysis.
+
+- 📄 [DOS Attack Data.csv](assets/DOS%20Attack%20Data.csv)
+
+---
+
+**Exported Detection & Interaction Logs (JSON)**  
+Structured output capturing detection events, explanations, and system state.  
+Suitable for research analysis and reproducibility.
+
+- 📄 [CAN Intrusion Detection Data.json](assets/CAN%20Intrusion%20Detection%20Data.json)
+
+---
+
+### Asset Notes
+
+- All images are screenshots captured from the running application
+- CSV and JSON files are exported directly from the system
+- Assets support documentation, reproducibility, and qualitative analysis
 
 ## Version History
 
