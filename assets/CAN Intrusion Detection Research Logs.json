@@ -1,0 +1,82 @@
+[
+  {
+    "sessionId": "session_1770549698982_4sjiyvww6",
+    "userId": null,
+    "timestamp": 1770549700372,
+    "iso_timestamp": "2026-02-08T11:21:40.372Z",
+    "event": "tab_switched",
+    "from": "dashboard",
+    "to": "real-time"
+  },
+  {
+    "sessionId": "session_1770549698982_4sjiyvww6",
+    "userId": null,
+    "timestamp": 1770549801379,
+    "iso_timestamp": "2026-02-08T11:23:21.379Z",
+    "event": "tab_switched",
+    "from": "real-time",
+    "to": "attacks"
+  },
+  {
+    "sessionId": "session_1770549698982_4sjiyvww6",
+    "userId": null,
+    "timestamp": 1770549804351,
+    "iso_timestamp": "2026-02-08T11:23:24.351Z",
+    "event": "attack_generated",
+    "attack_type": "fuzzy",
+    "num_samples": 50,
+    "success": true
+  },
+  {
+    "sessionId": "session_1770549698982_4sjiyvww6",
+    "userId": null,
+    "timestamp": 1770549807971,
+    "iso_timestamp": "2026-02-08T11:23:27.971Z",
+    "event": "attack_generated",
+    "attack_type": "replay",
+    "num_samples": 50,
+    "success": true
+  },
+  {
+    "sessionId": "session_1770549698982_4sjiyvww6",
+    "userId": null,
+    "timestamp": 1770549810084,
+    "iso_timestamp": "2026-02-08T11:23:30.084Z",
+    "event": "attack_generated",
+    "attack_type": "spoofing",
+    "num_samples": 50,
+    "success": true
+  },
+  {
+    "sessionId": "session_1770549698982_4sjiyvww6",
+    "userId": null,
+    "timestamp": 1770549811835,
+    "iso_timestamp": "2026-02-08T11:23:31.835Z",
+    "event": "attack_generated",
+    "attack_type": "dos",
+    "num_samples": 50,
+    "success": true
+  },
+  {
+    "sessionId": "session_1770549698982_4sjiyvww6",
+    "userId": null,
+    "timestamp": 1770549813459,
+    "iso_timestamp": "2026-02-08T11:23:33.459Z",
+    "event": "tab_switched",
+    "from": "attacks",
+    "to": "analysis"
+  },
+  {
+    "sessionId": "session_1770549698982_4sjiyvww6",
+    "userId": null,
+    "timestamp": 1770549820237,
+    "iso_timestamp": "2026-02-08T11:23:40.237Z",
+    "event": "model_comparison_run",
+    "svm_score": -279.0224754685165,
+    "lstm_score": 20.910079025285523,
+    "battery_score": 239.85089072492192,
+    "svm_anomaly": false,
+    "lstm_anomaly": true,
+    "battery_anomaly": true
+  }
+]
