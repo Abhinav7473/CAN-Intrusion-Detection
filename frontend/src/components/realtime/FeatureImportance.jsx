@@ -1,8 +1,21 @@
+import { useEffect } from 'react'
 import { X, AlertCircle } from 'lucide-react'
 import useAnomalyStore from '../../stores/useAnomalyStore'
 
 const FeatureImportance = () => {
   const { selectedAnomaly, clearSelection } = useAnomalyStore()
+  
+  useEffect(() => {
+    if (selectedAnomaly) {
+      logger.log({
+        event: 'explanation_viewed',
+        anomaly_score: selectedAnomaly.anomaly_score,
+        is_anomaly: selectedAnomaly.is_anomaly,
+        top_contributor: selectedAnomaly.feature_importance?.features[0]?.feature,
+        top_contribution_pct: selectedAnomaly.feature_importance?.features[0]?.contribution
+      })
+    }
+  }, [selectedAnomaly])
   
   if (!selectedAnomaly) return null
   

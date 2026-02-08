@@ -1,93 +1,95 @@
-# CAN Intrusion Detection - HCI Research Platform
+# CAN Intrusion Detection System
 
-A modern, interactive system for real-time anomaly detection in automotive CAN bus networks, built with a focus on human-computer interaction research and explainable AI.
+A web-based platform for real-time anomaly detection in automotive Controller Area Network (CAN) bus data, designed to support research in operator decision-making and explainable AI systems.
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Python](https://img.shields.io/badge/python-3.12-blue.svg)
-![React](https://img.shields.io/badge/react-18.3-blue.svg)
+**Version:** 2.0.0  
+**Status:** Active Development  
+**License:** MIT
 
-## 🎯 Project Overview
+![Python](https://img.shields.io/badge/python-3.12-blue)
+![React](https://img.shields.io/badge/react-18.3-blue)
+![FastAPI](https://img.shields.io/badge/fastapi-0.109-green)
 
-This system transforms traditional ML-based intrusion detection into an interactive research platform for studying:
-- **Trust calibration** in automated security systems
-- **Explainability effectiveness** for operator decision-making
-- **Alert fatigue** and cognitive load in real-time monitoring
-- **Progressive disclosure** as an interface design pattern
+---
 
-### Key Features
+## Overview
 
-✅ **Real-Time Anomaly Detection**
-- Live sensor data streaming (2-second intervals)
-- One-Class SVM classification with feature importance
-- Interactive threshold adjustment
-- Color-coded visual feedback
+This project reimagines traditional intrusion detection systems by focusing on the human operator experience. Rather than simply flagging anomalies, the system provides interactive explanations, comparative model analysis, and visual tools to help operators understand and trust automated decisions.
 
-✅ **Interactive Explainability**
-- Click-to-explain anomaly investigation
-- Feature contribution analysis with z-scores
-- Progressive disclosure of technical details
-- Comparative normal vs anomaly visualization
+Built as a complete architectural redesign from a previous Streamlit implementation, this version separates concerns into a FastAPI backend and React frontend, enabling more sophisticated interaction patterns and research-oriented features.
 
-✅ **3D Visualization**
-- Three.js-powered spatial representation
-- Real-time point cloud updates
-- Interactive camera controls
-- Anomaly clustering in 3D space
+---
 
-✅ **Attack Simulation**
-- Generate synthetic attacks (Fuzzy, Spoofing, Replay, DoS)
-- Side-by-side pattern comparison
-- Radar charts and statistical analysis
-- CSV export for further research
+## Core Features
 
-## 🏗️ Architecture
-```
-┌─────────────────────────────────────────────────────────┐
-│                    Frontend (React)                     │
-│  ┌─────────────┐  ┌──────────────┐  ┌───────────────┐ │
-│  │  Real-Time  │  │   Attacks    │  │   3D Viz      │ │
-│  │  Detection  │  │  Simulation  │  │   Analysis    │ │
-│  └─────────────┘  └──────────────┘  └───────────────┘ │
-│         │                 │                  │          │
-│         └─────────────────┴──────────────────┘          │
-│                          │                               │
-│                   Zustand Store                          │
-│                   (Global State)                         │
-└──────────────────────────┬──────────────────────────────┘
-                           │ REST API / WebSocket
-┌──────────────────────────┴──────────────────────────────┐
-│                  Backend (FastAPI)                       │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐ │
-│  │  One-Class   │  │     LSTM     │  │   Battery    │ │
-│  │     SVM      │  │  Autoencoder │  │     LSTM     │ │
-│  └──────────────┘  └──────────────┘  └──────────────┘ │
-│                                                          │
-│              Models + Feature Importance                 │
-└──────────────────────────────────────────────────────────┘
-```
+### Real-Time Monitoring
+Monitor live CAN bus sensor data with immediate anomaly detection using One-Class Support Vector Machines. The interface updates every two seconds, displaying eight sensor readings simultaneously with color-coded status indicators.
 
-## 📋 Prerequisites
+Key capabilities:
+- Adjustable detection sensitivity via threshold slider
+- Interactive timeline visualization showing anomaly patterns over time
+- Click-to-explain functionality revealing which sensors contributed to each detection
+- Live statistics tracking detection rates and model confidence
 
-### Backend
-- Python 3.12 (3.9-3.12 supported)
+### Attack Simulation
+Generate synthetic attack patterns to understand how different intrusion types manifest in sensor data. Supports four attack categories:
+- Fuzzy attacks (random sensor values)
+- Spoofing attacks (subtly modified legitimate data)
+- Replay attacks (old data with current timestamps)
+- Denial-of-service patterns (message flooding)
+
+Each generated attack can be compared against normal traffic patterns through side-by-side visualizations and exported as CSV for offline analysis.
+
+### Multi-Model Analysis
+Compare three different detection approaches on identical data:
+- SVM provides instant single-point analysis
+- LSTM Autoencoder examines temporal patterns across ten sequential readings
+- Battery-specific LSTM focuses on voltage anomalies
+
+The system highlights when models disagree, creating opportunities to study how operators resolve conflicting automated advice.
+
+### 3D Spatial Visualization
+Explore sensor readings in three-dimensional space using WebGL rendering. Normal and anomalous data points cluster differently in this representation, with interactive camera controls allowing free exploration. New data points pulse briefly when added during live streaming.
+
+---
+
+## Technical Architecture
+
+### Backend Stack
+- Python 3.12
+- FastAPI web framework
+- TensorFlow 2.17 for neural network models
+- Scikit-learn for SVM implementation
+- Pandas and NumPy for data processing
+
+### Frontend Stack
+- React 18 with Vite build tool
+- Tailwind CSS for styling
+- Zustand for state management
+- Recharts for 2D data visualization
+- Three.js with React Three Fiber for 3D graphics
+- Axios for HTTP requests
+
+### Machine Learning Models
+Three pre-trained models work in parallel:
+1. One-Class SVM trained on normal traffic patterns
+2. LSTM Autoencoder learning temporal sequences
+3. Specialized LSTM for battery voltage monitoring
+
+All models include feature importance calculations to support explainability.
+
+---
+
+## Installation
+
+### Requirements
+- Python 3.12 (or 3.9-3.12)
+- Node.js 16 or higher
 - 4GB RAM minimum
-- 500MB disk space for models
+- Modern web browser with WebGL support
 
-### Frontend
-- Node.js 16+ 
-- npm or yarn
-- Modern browser with WebGL support
+### Backend Setup
 
-## 🚀 Quick Start
-
-### 1. Clone Repository
-```bash
-git clone https://github.com/Abhinav7473/CAN-Intrusion-Detection.git
-cd CAN-Intrusion-Detection
-git checkout fastapi-react-hci
-```
-
-### 2. Backend Setup
 ```bash
 cd backend
 
@@ -99,333 +101,299 @@ source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
 # Verify structure
-ls models/  # Should see: battery.h5, lstm_autoencoder.h5, scaler.pkl
-ls data/    # Should see: CAN.csv
-
-# Start server
-python app.py
+ls models/  # Should contain: battery.h5, lstm_autoencoder.h5, scaler.pkl
+ls data/    # Should contain: CAN.csv
 ```
 
-Backend will start on **http://localhost:8000**
+### Frontend Setup
 
-Interactive API docs available at **http://localhost:8000/docs**
-
-### 3. Frontend Setup
 ```bash
 cd frontend
 
 # Install dependencies
 npm install
 
-# Start development server
+# Verify configuration
+ls src/components/  # Should contain: realtime/, attacks/, analysis/
+```
+
+---
+
+## Running the Application
+
+Start both servers in separate terminal windows:
+
+**Terminal 1 - Backend:**
+```bash
+cd backend
+source venv/bin/activate
+python app.py
+```
+Server starts at `http://localhost:8000`
+
+**Terminal 2 - Frontend:**
+```bash
+cd frontend
 npm run dev
 ```
+Interface opens at `http://localhost:3000`
 
-Frontend will start on **http://localhost:3000**
+Navigate to the frontend URL in your browser. The header should show "Connected" when the backend is reachable.
 
-### 4. Verify Installation
+---
 
-1. Navigate to http://localhost:3000
-2. Check header shows "✅ Connected"
-3. Click "Real-Time" → "Start Stream"
-4. Verify data appears and updates every 2 seconds
+## Usage Guide
 
-## 📖 Usage Guide
+### Getting Started
+1. Open `http://localhost:3000` in your browser
+2. Navigate to the Real-Time tab
+3. Click "Start Stream" to begin data collection
+4. Observe sensor readings updating every two seconds
 
-### Real-Time Detection
+### Investigating Anomalies
+When the system detects an anomaly (red dot on timeline):
+1. Click the red dot or the "Explain" button
+2. Review the modal showing which sensors deviated from normal
+3. See contribution percentages and z-scores for each feature
+4. Close the modal to continue monitoring
 
-**Purpose**: Monitor live sensor data with anomaly detection
+### Comparing Detection Models
+1. Collect at least 10 readings via streaming
+2. Navigate to the Analysis tab
+3. Switch to "Model Comparison" view
+4. Click "Run Comparison" to see how all three models evaluate the same data
+5. Review the agreement analysis to understand model consensus
 
-**How to use**:
-1. Navigate to **Real-Time** tab
-2. Click **Start Stream**
-3. Adjust threshold slider to control sensitivity
-4. Click red dots on timeline to investigate anomalies
-5. Click **Explain** button for detailed feature analysis
+### Simulating Attacks
+1. Navigate to the Attacks tab
+2. Select an attack type
+3. Adjust sample count as needed
+4. Click "Generate" to create synthetic attack data
+5. Review comparison charts showing attack versus normal patterns
+6. Use "Download CSV" to export data for further analysis
 
-**Research applications**:
-- Study operator response times to alerts
-- Measure threshold preference across users
-- Track click patterns on anomaly explanations
-- A/B test different visualization styles
+### Exporting Research Data
+Click "Export Logs" in the header to download a JSON file containing all user interactions during the session. This file includes timestamps, events, and relevant context for each action.
 
-### Attack Simulation
+---
 
-**Purpose**: Generate and compare attack patterns
+## Project Structure
 
-**How to use**:
-1. Navigate to **Attacks** tab
-2. Select attack type (Fuzzy/Spoofing/Replay/DoS)
-3. Adjust sample count (10-200)
-4. Click **Generate Attack**
-5. Review comparison charts
-6. Download CSV for analysis
+```
+CAN-Intrusion-Detection/
+├── backend/
+│   ├── app.py                 # FastAPI application
+│   ├── requirements.txt       # Python dependencies
+│   ├── models/               # ML model implementations
+│   ├── schemas/              # Request validation
+│   ├── utils/                # Helper functions
+│   └── data/                 # Training dataset
+├── frontend/
+│   ├── package.json          # Node dependencies
+│   ├── vite.config.js       # Build configuration
+│   ├── tailwind.config.js   # Style configuration
+│   └── src/
+│       ├── components/       # React components
+│       ├── hooks/           # Custom React hooks
+│       ├── stores/          # State management
+│       └── utils/           # Helper functions
+├── assets/                   # Screenshots and examples
+└── README.md
+```
 
-**Research applications**:
-- Compare detection rates across attack types
-- Study pattern recognition in visualization
-- Test operator ability to distinguish attacks
+---
 
-### 3D Analysis
+## API Reference
 
-**Purpose**: Explore sensor space with interactive visualization
+### Check System Health
+```http
+GET /api/health
+```
+Returns status of all loaded models.
 
-**How to use**:
-1. Collect data via Real-Time streaming
-2. Navigate to **Analysis** tab
-3. Rotate/zoom/pan with mouse
-4. Click points to see details
-5. Observe anomaly clustering
+### Generate Synthetic Attack
+```http
+POST /api/attacks/generate
+Content-Type: application/json
 
-**Research applications**:
-- Study spatial reasoning vs 2D charts
-- Measure time-to-insight for cluster identification
-- Compare 2D vs 3D for pattern recognition
+{
+  "attack_type": "fuzzy",
+  "num_samples": 50
+}
+```
 
-## 🔧 Configuration
+### Detect Anomaly (SVM)
+```http
+POST /api/anomaly/detect-svm
+Content-Type: application/json
 
-### Backend Configuration
+{
+  "datetime": 1234567890.0,
+  "Accelerometer1RMS": 0.21,
+  "Accelerometer2RMS": 0.27,
+  "current": 2.70,
+  "pressure": 0.05,
+  "temperature": 89.38,
+  "thermocouple": 28.88,
+  "voltage": 224.93,
+  "VolumeFlowRateRMS": 126.67
+}
+```
 
-**Adjust detection sensitivity** (`backend/models/svm_model.py`):
+Response includes anomaly score, detection result, and feature importance rankings.
+
+Interactive API documentation available at `http://localhost:8000/docs` when the backend is running.
+
+---
+
+## Configuration
+
+### Adjust Detection Sensitivity
+Edit `backend/models/svm_model.py`, line 47:
 ```python
-# Line 32: Change threshold
-prediction = 1 if anomaly_score >= 60 else -1  # Default: 60
+prediction = 1 if anomaly_score >= 60 else -1  # Change 60 to adjust threshold
 ```
 
-**Change polling interval** (`frontend/src/App.jsx`):
+### Modify Polling Interval
+Edit `frontend/src/App.jsx`, line 12:
 ```javascript
-// Line 13: Change from 2000ms (2 seconds)
-useRealtimeData(isStreaming, 2000)
+useRealtimeData(isStreaming, 2000)  // Change 2000 to desired milliseconds
 ```
 
-### Frontend Configuration
-
-**Customize colors** (`frontend/tailwind.config.js`):
+### Customize Color Scheme
+Edit `frontend/tailwind.config.js`:
 ```javascript
 colors: {
   'anomaly': {
-    'critical': '#EF4444',  // Red for high-severity
-    'high': '#F59E0B',      // Orange
-    'low': '#10B981',       // Green
+    'critical': '#EF4444',  // Red for high severity
+    'high': '#F59E0B',      // Orange for medium
+    'low': '#10B981',       // Green for normal
   }
 }
 ```
 
-## 📊 Data Collection for Research
+---
 
-### Interaction Logging
+## Research Applications
 
-Track user behavior by adding logging to components:
-```javascript
-// Example: Log threshold changes
-const handleThresholdChange = (newValue) => {
-  console.log({
-    timestamp: Date.now(),
-    action: 'threshold_adjusted',
-    from: threshold,
-    to: newValue,
-    anomaly_count_before: anomalies.length
-  })
-  setThreshold(newValue)
-}
-```
+This system was designed to support studies in several areas:
 
-### Export Data
-```javascript
-// Add to ControlPanel.jsx
-const exportData = () => {
-  const csv = readings.map(r => ({
-    timestamp: r.timestamp,
-    is_anomaly: r.is_anomaly,
-    score: r.anomaly_score,
-    user_clicked: r.user_clicked || false
-  }))
-  // Convert to CSV and download
-}
-```
+**Trust Calibration:** Track how operators adjust detection thresholds over time. Do they converge on consistent sensitivity levels? How do false positives influence their calibration behavior?
 
-## 🧪 Testing
+**Explanation Effectiveness:** Log which anomalies users investigate versus ignore. Does viewing feature importance increase confidence in automated decisions? How do operators respond when the explanation contradicts their intuition?
 
-### Backend Tests
-```bash
-cd backend
-python -m pytest tests/
-```
+**Model Comparison:** When models disagree, which does the operator trust more? Does temporal context (LSTM) override instant feedback (SVM)? Are specialized models perceived as more reliable?
 
-### Frontend Tests
-```bash
-cd frontend
-npm test
-```
+**Interface Design:** Compare 2D timeline visualization against 3D spatial representation. Which helps operators identify patterns faster? Does 3D add cognitive load or improve understanding?
 
-### Manual Testing Checklist
-
-- [ ] Backend starts without errors
-- [ ] Frontend connects to backend (green checkmark)
-- [ ] Real-time streaming works
-- [ ] Anomalies are detected and highlighted
-- [ ] Timeline is clickable
-- [ ] Feature importance modal appears
-- [ ] 3D visualization renders
-- [ ] Attack generation works
-- [ ] Comparison charts display
-
-## 📁 Project Structure
-```
-CAN-Intrusion-Detection/
-├── backend/
-│   ├── app.py                      # FastAPI main app
-│   ├── requirements.txt            # Python dependencies
-│   ├── models/
-│   │   ├── svm_model.py           # One-Class SVM detector
-│   │   ├── lstm_model.py          # LSTM autoencoder
-│   │   ├── battery_model.py       # Battery voltage detector
-│   │   ├── battery.h5             # Pre-trained model
-│   │   ├── lstm_autoencoder.h5    # Pre-trained model
-│   │   └── scaler.pkl             # Feature scaler
-│   ├── schemas/
-│   │   └── requests.py            # Pydantic validation
-│   ├── utils/
-│   │   └── attack_gen.py          # Synthetic attack generator
-│   └── data/
-│       └── CAN.csv                # Training dataset
-├── frontend/
-│   ├── package.json               # Node dependencies
-│   ├── vite.config.js             # Vite configuration
-│   ├── tailwind.config.js         # Styling configuration
-│   └── src/
-│       ├── App.jsx                # Main application
-│       ├── components/
-│       │   ├── realtime/          # Real-time detection UI
-│       │   ├── attacks/           # Attack simulation UI
-│       │   └── analysis/          # 3D visualization UI
-│       ├── hooks/
-│       │   └── useRealtimeData.js # Polling logic
-│       ├── stores/
-│       │   └── useAnomalyStore.js # Global state
-│       └── utils/
-│           └── api.js             # API client
-└── README.md
-```
-
-## 🐛 Troubleshooting
-
-### Backend won't start
-
-**Error**: `FileNotFoundError: CAN.csv`
-```bash
-# Verify file locations
-ls backend/data/CAN.csv
-ls backend/models/*.h5
-```
-
-**Error**: `ModuleNotFoundError: tensorflow`
-```bash
-# Reinstall dependencies
-pip install -r requirements.txt
-```
-
-### Frontend won't connect
-
-**Error**: "❌ Offline" in header
-```bash
-# Check backend is running
-curl http://localhost:8000/api/health
-
-# Check for port conflicts
-lsof -i:8000
-```
-
-**Error**: Blank page
-```bash
-# Check browser console for errors
-# Restart dev server
-npm run dev
-```
-
-### 3D Visualization not rendering
-
-**Error**: Black screen in Analysis tab
-- Verify WebGL is enabled in browser
-- Check for GPU/driver issues
-- Try different browser
-
-## 🎓 Research Applications
-
-### Trust Calibration Study
-
-**Research Question**: How do operators calibrate trust in ML systems?
-
-**Method**:
-1. Track threshold adjustments over time
-2. Log confidence before/after seeing explanations
-3. Measure detection rate preferences
-
-**Data to collect**:
-- Initial threshold setting
-- Number of adjustments
-- Final threshold value
-- Time to reach stable preference
-
-### Explanation Effectiveness
-
-**Research Question**: Do feature importance explanations improve decision accuracy?
-
-**Method**:
-1. A/B test: Show vs hide explanations
-2. Measure: Decision time, accuracy, confidence
-3. Survey: Perceived helpfulness
-
-**Implementation**:
-```javascript
-const variant = user.id % 2  // A/B split
-const showExplanations = variant === 0
-```
-
-### Alert Fatigue
-
-**Research Question**: At what detection rate do users experience alert fatigue?
-
-**Method**:
-1. Vary detection rate (20%, 40%, 60%, 80%)
-2. Measure: Response time degradation
-3. Track: Missed anomalies over time
-
-## 🤝 Contributing
-
-This project was developed for HCI research. Contributions welcome!
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open Pull Request
-
-## 📄 License
-
-MIT License - see LICENSE file for details
-
-## 👤 Author
-
-**Abhinav Balakrishnan**
-- GitHub: [@Abhinav7473](https://github.com/Abhinav7473)
-- LinkedIn: [abhinav-balki](https://linkedin.com/in/abhinav-balki)
-
-## 🙏 Acknowledgments
-
-- Original Streamlit implementation: Team collaboration
-- CAN bus dataset: [Kaggle](https://www.kaggle.com/datasets/ankitrajsh/can-bus-anomaly-detection-dataset)
-- Research focus: VIT Chennai HCI studies
-
-## 📚 References
-
-1. One-Class SVM for Anomaly Detection
-2. LSTM Autoencoders for Time-Series Analysis
-3. Progressive Disclosure in Interface Design
-4. Explainable AI for Security Systems
+The interaction logging system captures events like threshold adjustments, explanation views, model comparisons, and navigation patterns. Export logs as JSON for analysis in statistical software or qualitative coding tools.
 
 ---
 
-**Built with**: FastAPI • React • Three.js • TensorFlow • Scikit-learn
+## Known Limitations
 
-**Research Focus**: Human-Centered AI • Explainable ML • Operator Trust
+**Model Training:** All models use pre-existing training data and cannot be retrained through the interface. To update models, retrain externally and replace the .h5 files.
+
+**Data Persistence:** Collected readings exist only in browser memory and reset when the page refreshes. Export logs before closing to preserve session data.
+
+**Concurrent Users:** The system runs locally and does not support multiple simultaneous users. Each instance maintains independent state.
+
+**Browser Compatibility:** 3D visualization requires WebGL support. Some older browsers or restrictive security settings may block this feature.
+
+---
+
+## Troubleshooting
+
+**Backend fails to start:**
+- Verify Python version: `python --version` (should be 3.9-3.12)
+- Check virtual environment is activated
+- Ensure all model files exist in `backend/models/`
+- Review terminal output for missing dependencies
+
+**Frontend shows "Offline" status:**
+- Confirm backend is running on port 8000
+- Check for port conflicts: `lsof -i:8000`
+- Verify no firewall blocking localhost connections
+- Try accessing `http://localhost:8000/api/health` directly
+
+**3D visualization shows black screen:**
+- Enable WebGL in browser settings
+- Update graphics drivers
+- Try a different browser
+- Check browser console for specific error messages
+
+**Models return incorrect predictions:**
+- Verify model files are not corrupted
+- Check that input data matches expected format
+- Review scaler.pkl exists and is accessible
+- Examine backend terminal for model loading errors
+
+---
+
+## Development Notes
+
+**Adding New Sensors:** Update the schema in `backend/schemas/requests.py` and modify model wrappers to handle additional features. Frontend components will need corresponding updates to display new data.
+
+**Implementing New Models:** Create a detector class following the pattern in `backend/models/`, add an endpoint in `app.py`, and create frontend components to display results.
+
+**Modifying Visualizations:** Chart configurations live in their respective components under `frontend/src/components/`. Recharts and Three.js both support extensive customization through props.
+
+---
+
+## Dataset Information
+
+The system uses CAN bus data containing readings from automotive sensors. Each record includes:
+- Timestamp
+- Two accelerometer measurements
+- Current draw
+- Pressure reading
+- Temperature (two sensors)
+- Voltage
+- Volume flow rate
+
+Data originates from normal vehicle operation with no attacks present in the training set. Models learn expected patterns from this baseline to identify deviations.
+
+---
+
+## Contributing
+
+This project welcomes improvements and extensions. To contribute:
+
+1. Fork the repository
+2. Create a feature branch
+3. Implement changes with clear commit messages
+4. Test thoroughly with both frontend and backend
+5. Submit a pull request with description of modifications
+
+Focus areas for contribution:
+- Additional machine learning models
+- Alternative visualization approaches
+- Enhanced interaction logging
+- Performance optimizations
+- Documentation improvements
+
+---
+
+## Version History
+
+**2.0.0** (Current)
+- Complete architectural redesign
+- FastAPI backend replacing Streamlit
+- React frontend with component-based architecture
+- Multi-model comparison feature
+- Interactive 3D visualization
+- Research-oriented interaction logging
+
+**1.0.0** (Previous)
+- Streamlit monolithic application
+- MySQL authentication
+- Basic SVM and LSTM detection
+- Static matplotlib visualizations
+
+---
+
+## License
+
+This project is released under the MIT License. See LICENSE file for details.
+
+Permission is granted to use, modify, and distribute this software for educational and research purposes. Commercial use requires attribution to original authors.

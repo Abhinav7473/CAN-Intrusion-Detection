@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Zap, Download, RefreshCw } from 'lucide-react'
 import { generateAttack } from '../../utils/api'
+import logger from '../../utils/logger'
 
 const AttackGenerator = ({ onAttackGenerated }) => {
   const [attackType, setAttackType] = useState('fuzzy')
@@ -40,6 +41,15 @@ const AttackGenerator = ({ onAttackGenerated }) => {
     try {
       const result = await generateAttack(attackType, numSamples)
       setGeneratedData(result)
+      
+      // Log attack generation
+      logger.log({
+        event: 'attack_generated',
+        attack_type: attackType,
+        num_samples: numSamples,
+        success: true
+      })
+      
       if (onAttackGenerated) {
         onAttackGenerated(result)
       }
