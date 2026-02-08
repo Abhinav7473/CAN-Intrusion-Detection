@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { X, AlertCircle } from 'lucide-react'
 import useAnomalyStore from '../../stores/useAnomalyStore'
+import logger from '../../utils/logger'
 
 const FeatureImportance = () => {
   const { selectedAnomaly, clearSelection } = useAnomalyStore()
