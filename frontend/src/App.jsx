@@ -6,6 +6,7 @@ import AttacksView from './components/attacks/AttacksView'
 import AnalysisView from './components/analysis/AnalysisView'
 import useAnomalyStore from './stores/useAnomalyStore'
 import useRealtimeData from './hooks/useRealtimeData'
+import logger from './utils/logger'
 
 function App() {
   const [selectedView, setSelectedView] = useState('dashboard')
@@ -40,6 +41,13 @@ function App() {
           </div>
           <div className="flex items-center gap-4">
             <span className="text-sm">{apiStatus}</span>
+            <button 
+              onClick={() => logger.downloadLogs()}
+              className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition text-sm"
+              title="Download interaction logs"
+            >
+              Export Logs
+            </button>
             <button className="px-4 py-2 bg-anomaly-critical rounded-lg hover:bg-red-600 transition">
               Emergency Stop
             </button>
@@ -53,7 +61,14 @@ function App() {
           {['dashboard', 'real-time', 'attacks', 'analysis'].map((view) => (
             <button
               key={view}
-              onClick={() => setSelectedView(view)}
+              onClick={() => {
+                logger.log({
+                  event: 'tab_switched',
+                  from: selectedView,
+                  to: view
+                })
+                setSelectedView(view)
+              }}
               className={`px-4 py-2 rounded-lg transition ${
                 selectedView === view
                   ? 'bg-anomaly-normal text-white'

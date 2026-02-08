@@ -111,7 +111,7 @@ async def detect_svm(reading: SensorReading):
             "method": "One-Class SVM",
             "is_anomaly": prediction == 1,
             "anomaly_score": float(score),
-            "confidence": abs(float(score)) / 100.0,
+            "confidence": min(abs(float(score)) / 100.0, 1.0),  # Cap at 1.0 (100%)
             "timestamp": reading.datetime,
             "feature_importance": importance  # NEW: Feature contributions
         }
@@ -132,15 +132,27 @@ async def detect_lstm(readings: list[SensorReading]):
                 content={"error": "LSTM requires at least 10 sequential readings"}
             )
         
-        sequence = [r.to_array() for r in readings[-10:]]
+        sequence = []
+        for r in readings[-10:]:
+            sequence.append([
+                r.datetime,
+                r.accelerometer1_rms,
+                r.accelerometer2_rms,
+                r.current,
+                r.pressure,
+                r.temperature,
+                r.thermocouple,
+                r.volume_flow_rate_rms
+            ])
+
         is_anomaly, reconstruction_error = lstm_detector.detect(sequence)
-        
+
         return {
             "success": True,
             "method": "LSTM Autoencoder",
-            "is_anomaly": is_anomaly,
+            "is_anomaly": bool(is_anomaly),  # Convert numpy.bool_ to Python bool
             "reconstruction_error": float(reconstruction_error),
-            "threshold": lstm_detector.threshold
+            "threshold": float(lstm_detector.threshold)  # Also convert threshold
         }
     except Exception as e:
         return JSONResponse(
@@ -161,11 +173,11 @@ async def detect_battery_spoofing(readings: list[SensorReading]):
         
         voltage_sequence = [(r.datetime, r.voltage) for r in readings[-10:]]
         is_anomaly, score = battery_detector.detect(voltage_sequence)
-        
+
         return {
             "success": True,
             "method": "Battery LSTM",
-            "is_spoofed": is_anomaly,
+            "is_spoofed": bool(is_anomaly),  # Convert numpy.bool_ to Python bool
             "anomaly_score": float(score)
         }
     except Exception as e:

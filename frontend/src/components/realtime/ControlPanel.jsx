@@ -18,6 +18,15 @@ const ControlPanel = ({ isStreaming, onToggleStream }) => {
         ? ((anomalyCount / totalReadings) * 100).toFixed(1)
         : 0
 
+    const handleClearHistory = () => {
+        clearHistory()
+        logger.log({
+            event: 'clear_history',
+            anomaly_count: anomalyCount,
+            total_readings: totalReadings
+        })
+    }
+
     return (
         <div className="bg-background-card rounded-lg p-6 border border-gray-700">
             <h3 className="text-lg font-semibold mb-4">Stream Controls</h3>

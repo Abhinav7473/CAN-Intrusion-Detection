@@ -90,9 +90,10 @@ const AnomalyTimeline = () => {
             stroke="#3B82F6"
             strokeWidth={2}
             dot={(props) => {
-              const { cx, cy, payload } = props
+              const { cx, cy, payload, index } = props  // Add index
               return (
                 <circle
+                  key={`dot-${payload.index}`}  // Add this line
                   cx={cx}
                   cy={cy}
                   r={payload.isAnomaly ? 6 : 3}
